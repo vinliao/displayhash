@@ -36,6 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"graphql": "^16.5.0",
-		"graphql-request": "^4.3.0"
+		"graphql-request": "^4.3.0",
+		"svelte-scrollto": "^0.2.0"
 	}
 }

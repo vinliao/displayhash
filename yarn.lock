@@ -1804,7 +1804,14 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.10.7:
     sorcery "^0.10.0"
     strip-indent "^3.0.0"
 
-svelte@^3.44.0:
+svelte-scrollto@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-scrollto/-/svelte-scrollto-0.2.0.tgz#a1da47876466796bba4533a4346537f752f01680"
+  integrity sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==
+  dependencies:
+    svelte "3.x"
+
+svelte@3.x, svelte@^3.44.0:
   version "3.49.0"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.49.0.tgz#5baee3c672306de1070c3b7888fc2204e36a4029"
   integrity sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==
