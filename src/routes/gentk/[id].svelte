@@ -56,44 +56,89 @@
 
 <script>
 	export let name, thumbnail, display, iterationThumbnails, description;
-	console.log(name);
-	console.log(thumbnail);
-	console.log(display);
+	const shortDescription = description.slice(0, 20) + '...';
+	let currentDescription = shortDescription;
+	let expanded = false;
 </script>
 
 <div class="flex flex-col">
-	<div class="h-screen py-5">
-		<h1 class="text-center text-xl">{name}</h1>
-		<img class="h-5/6 mx-auto object-contain my-5" src={display} alt="" />
-		<div class="max-w-5xl mx-auto px-2">
-			<p>---</p>
+	<div class="flex justify-between m-3">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+		</svg>
+
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-6 w-6"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+			/>
+		</svg>
+	</div>
+
+	<div class="h-fit mb-16">
+		<img class="h-1/2 object-contain mx-auto my-3" src={display} alt="" />
+		<div class="max-w-sm mx-auto">
+			<h1 class="text-4xl font-bold">{name}</h1>
+			<p>by abc</p>
 			<p>{description}</p>
-			<p>---</p>
 		</div>
+	</div>
+
+	<div class="flex justify-center mb-16">
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-3 w-3"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-3 w-3"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			class="h-3 w-3"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke="currentColor"
+			stroke-width="2"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
 	</div>
 
 	<div class="flex flex-wrap max-w-7xl mx-auto">
 		{#each iterationThumbnails as thumbnail, index}
-			<div class="basis-full px-3 pb-10 sm:basis-1/2 lg:basis-1/3">
+			<div class="basis-1/2 p-0.5 sm:basis-1/3">
 				<div class="flex justify-between items-center">
-					<p class="text-2xl">#{index + 1}</p>
+					<!-- <p class="text-2xl">#{index + 1}</p> -->
 					<div class="flex">
 						<!-- <svg
-							xmlns="http://www.w3.org/2000/svg"
-							class="h-6 w-6 mr-3"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-							stroke-width="2"
-						>
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-							/>
-						</svg> -->
-
-						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							class="h-6 w-6"
 							fill="none"
@@ -106,7 +151,7 @@
 								stroke-linejoin="round"
 								d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
 							/>
-						</svg>
+						</svg> -->
 					</div>
 				</div>
 				<img class="w-full h-auto" src={thumbnail} alt="" />
