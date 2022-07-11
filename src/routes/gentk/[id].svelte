@@ -7,37 +7,55 @@
 		const ipfsGateway = 'https://gateway.fxhash2.xyz/ipfs/';
 		const url = 'https://api.fxhash.xyz/graphql';
 		const query = gql`
-			query ExampleQuery($generativeTokenId: Float) {
+			query ExampleQuery($generativeTokenId: Float, $take: Int) {
 				generativeToken(id: $generativeTokenId) {
 					id
 					name
 					displayUri
+					metadata
 					thumbnailUri
+					objkts(take: $take) {
+						metadata
+					}
 				}
 			}
 		`;
 		const variables = {
-			generativeTokenId: Number(params.id)
+			generativeTokenId: Number(params.id),
+			take: 20
 		};
 
 		const result = await request(url, query, variables);
+		const description = result.generativeToken.metadata.description;
 		const thumbnail = ipfsGateway + result.generativeToken.thumbnailUri.slice(7);
 		const display = ipfsGateway + result.generativeToken.displayUri.slice(7);
+		console.log(result.generativeToken.objkts.length);
+
+		// probably can be done with filter or something...
+		let iterationThumbnails = [];
+		// result.generativeToken.objkts somethingsomething
+		result.generativeToken.objkts.forEach((objkt) => {
+			const iterationThumbnail = objkt.metadata.thumbnailUri;
+			iterationThumbnails.push(ipfsGateway + iterationThumbnail.slice(7));
+		});
+
 		// todo: combine uri with ipfsGateway
 
 		return {
 			status: 200,
 			props: {
 				name: result.generativeToken.name,
+				description,
 				thumbnail,
-				display
+				display,
+				iterationThumbnails
 			}
 		};
 	}
 </script>
 
 <script>
-	export let name, thumbnail, display;
+	export let name, thumbnail, display, iterationThumbnails, description;
 	console.log(name);
 	console.log(thumbnail);
 	console.log(display);
@@ -45,18 +63,18 @@
 
 <div class="flex flex-col">
 	<div class="h-screen py-5">
-		<h1 class="text-center text-2xl">piece title #355</h1>
+		<h1 class="text-center text-xl">{name}</h1>
 		<img class="h-5/6 mx-auto object-contain my-5" src={display} alt="" />
 		<div class="max-w-5xl mx-auto px-2">
 			<p>---</p>
-			<p>description blablabla read more</p>
+			<p>{description}</p>
 			<p>---</p>
 		</div>
 	</div>
 
-	<div class="flex justify-center flex-wrap">
-		{#each Array(23) as _, index (index)}
-			<div class="mx-5 mb-8">
+	<div class="flex flex-wrap max-w-7xl mx-auto">
+		{#each iterationThumbnails as thumbnail, index}
+			<div class="basis-full px-3 pb-10 sm:basis-1/2 lg:basis-1/3">
 				<div class="flex justify-between items-center">
 					<p class="text-2xl">#{index + 1}</p>
 					<div class="flex">
@@ -91,7 +109,7 @@
 						</svg>
 					</div>
 				</div>
-				<img src={thumbnail} alt="" />
+				<img class="w-full h-auto" src={thumbnail} alt="" />
 			</div>
 		{/each}
 	</div>
