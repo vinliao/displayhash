@@ -34,15 +34,15 @@
 		const author = result.generativeToken.author.name;
 		const description = result.generativeToken.metadata.description;
 		const slug = slugUrl + result.generativeToken.slug;
-		const thumbnail = ipfsGateway + result.generativeToken.thumbnailUri.slice(7);
 		const display = ipfsGateway + result.generativeToken.displayUri.slice(7);
+		const thumbnail = ipfsGateway + result.generativeToken.thumbnailUri.slice(7);
 
-		let iterationThumbnails = [];
+		let gentkThumbnails = [];
 		let gentkDisplays = [];
 
 		result.generativeToken.objkts.forEach((objkt) => {
-			const iterationThumbnail = objkt.metadata.thumbnailUri;
-			iterationThumbnails.push(ipfsGateway + iterationThumbnail.slice(7));
+			const gentkThumbnail = objkt.metadata.thumbnailUri;
+			gentkThumbnails.push(ipfsGateway + gentkThumbnail.slice(7));
 			gentkDisplays.push(ipfsGateway + objkt.metadata.displayUri.slice(7));
 		});
 
@@ -54,7 +54,7 @@
 				thumbnail,
 				display,
 				slug,
-				iterationThumbnails,
+				gentkThumbnails,
 				gentkDisplays,
 				author
 			}
@@ -64,18 +64,21 @@
 
 <script>
 	import * as animateScroll from 'svelte-scrollto';
-	export let name,
-		thumbnail,
-		display,
-		iterationThumbnails,
-		description,
-		author,
-		slug,
-		gentkDisplays;
+	export let name, display, thumbnail, description, author, slug, gentkDisplays, gentkThumbnails;
 
+	let iteration = 0;
 	function changeDisplay(index) {
-		display = gentkDisplays[index];
+		display = gentkThumbnails[index];
 		animateScroll.scrollToTop();
+		iteration = index + 1;
+
+		// when display image is fully loaded
+		// replace the thumbnail placeholder
+		const displayImg = new Image();
+		displayImg.src = gentkDisplays[index];
+		displayImg.onload = () => {
+			display = gentkDisplays[index];
+		};
 	}
 </script>
 
@@ -93,7 +96,7 @@
 		</svg>
 
 		<a href={slug}>
-			<div class="flex bg-neutral-800 text-neutral-200 py-2 px-4">
+			<div class="flex bg-neutral-800 text-neutral-200 py-2 px-4 rounded-full">
 				<span class="mr-3">view on fxhash</span>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -113,9 +116,18 @@
 		</a>
 	</div>
 
-	<img class="mx-auto my-10 object-contain md:h-[75vh] md:mt-0" src={display} alt="" />
+	<img
+		class="mx-auto my-10 object-contain md:h-[75vh] md:my-5"
+		src={display}
+		alt="generative artwork"
+	/>
+
 	<div class="max-w-sm mx-auto break-words mb-16 px-2">
-		<h1 class="text-4xl font-bold">{name}</h1>
+		{#if iteration == 0}
+			<h1 class="text-4xl font-bold">{name}</h1>
+		{:else}
+			<h1 class="text-4xl font-bold">{name} #{iteration}</h1>
+		{/if}
 		<p>by {author}</p>
 		<p>{description}</p>
 	</div>
@@ -152,10 +164,10 @@
 		</svg>
 	</div>
 	<div class="flex flex-wrap max-w-7xl mx-auto">
-		{#each iterationThumbnails as thumbnail, index}
+		{#each gentkThumbnails as thumbnail, index}
 			<div class="basis-1/2 p-0.5 sm:basis-1/3 lg:basis-1/4">
 				<img
-					class="w-full h-auto hover:cursor-pointer"
+					class="w-full h-auto hover:cursor-pointer hover:scale-[0.97] hover:rotate-2 transition-all"
 					on:click={() => changeDisplay(index)}
 					src={thumbnail}
 					alt=""
