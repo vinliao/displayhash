@@ -12,7 +12,7 @@
 
 	<p>
 		To use it, navigate to any Generative Token on fxhash and replace <code>fxhash.xyz</code> with
-		<code>displayhash.netlify.app</code> (moving JPEGs currently unsupported).
+		<code>displayhash.netlify.app</code> (animation currently unsupported).
 	</p>
 
 	<br />

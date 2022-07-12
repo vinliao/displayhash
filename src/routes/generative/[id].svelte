@@ -180,8 +180,8 @@
 		{:else}
 			<h1 class="text-4xl font-bold">{name} #{iteration}</h1>
 		{/if}
-		<p>by {author}</p>
-		<p>{description}</p>
+		<p class="mb-4">by {author}</p>
+		<div class="whitespace-pre-line">{description}</div>
 	</div>
 	<div class="flex justify-center mb-16">
 		<svg

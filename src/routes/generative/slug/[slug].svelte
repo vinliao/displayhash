@@ -31,11 +31,10 @@
 		let page = url.searchParams.get('page');
 		page = Number(page);
 		const gentksPerPage = 50;
-		const generativeSlug = params.slug
-    console.log(generativeSlug)
+		const generativeSlug = params.slug;
 		if (!page) page = 1;
 		const variables = {
-      slug: generativeSlug,
+			slug: generativeSlug,
 			skip: (page - 1) * gentksPerPage,
 			take: gentksPerPage
 		};
@@ -74,7 +73,7 @@
 				gentksPerPage,
 				author,
 				objktsCount,
-        generativeSlug,
+				generativeSlug,
 				balance,
 				page
 			}
@@ -96,7 +95,7 @@
 		gentksPerPage,
 		objktsCount,
 		balance,
-    generativeSlug,
+		generativeSlug,
 		page;
 
 	let currentDisplay = thumbnail;
@@ -181,8 +180,8 @@
 		{:else}
 			<h1 class="text-4xl font-bold">{name} #{iteration}</h1>
 		{/if}
-		<p>by {author}</p>
-		<p>{description}</p>
+		<p class="mb-4">by {author}</p>
+		<div class="whitespace-pre-line">{description}</div>
 	</div>
 	<div class="flex justify-center mb-16">
 		<svg
