@@ -158,10 +158,19 @@
 </script>
 
 <script>
+	// shuffle list
 	export let hot, top, newGenerative, mintable, bigCollection;
-	// console.log(hot);
-	// console.log(top);
-	// console.log(newGenerative);
-	// console.log(mintable);
-	// console.log(bigCollection);
+	const categories = [hot, top, newGenerative, mintable, bigCollection];
+	const categoriesText = ['hot', 'top', 'new', 'mintable', "big collector's collection"];
 </script>
+
+{#each categories as category, index}
+	<p>{categoriesText[index]}</p>
+	<div class="flex space-x-1 overflow-x-scroll py-2">
+		{#each category as item}
+			<a href="/generative/{item.id}">
+				<img loading="lazy" class="max-w-sm h-[37vh]" src={item.thumbnail} alt="generative artwork" /></a
+			>
+		{/each}
+	</div>
+{/each}
