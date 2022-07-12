@@ -8,8 +8,8 @@
 		const graphqlUrl = 'https://api.fxhash.xyz/graphql';
 		const slugUrl = 'https://fxhash.xyz/generative/slug/';
 		const query = gql`
-			query ExampleQuery($generativeTokenId: Float, $take: Int, $skip: Int) {
-				generativeToken(id: $generativeTokenId) {
+			query ExampleQuery($slug: String, $take: Int, $skip: Int) {
+				generativeToken(slug: $slug) {
 					id
 					name
 					author {
@@ -31,10 +31,11 @@
 		let page = url.searchParams.get('page');
 		page = Number(page);
 		const gentksPerPage = 50;
-		const generativeId = Number(params.id);
+		const generativeSlug = params.slug
+    console.log(generativeSlug)
 		if (!page) page = 1;
 		const variables = {
-			generativeTokenId: generativeId,
+      slug: generativeSlug,
 			skip: (page - 1) * gentksPerPage,
 			take: gentksPerPage
 		};
@@ -63,7 +64,6 @@
 			status: 200,
 			props: {
 				name: result.generativeToken.name,
-				generativeId,
 				description,
 				thumbnail,
 				display,
@@ -74,6 +74,7 @@
 				gentksPerPage,
 				author,
 				objktsCount,
+        generativeSlug,
 				balance,
 				page
 			}
@@ -95,8 +96,8 @@
 		gentksPerPage,
 		objktsCount,
 		balance,
-		page,
-		generativeId;
+    generativeSlug,
+		page;
 
 	let currentDisplay = thumbnail;
 	let defaultDisplay;
@@ -230,7 +231,7 @@
 
 	<div class="flex justify-center space-x-10 mb-16 font-mono">
 		{#if page > 1}
-			<a href="/generative/{generativeId}/?page={page - 1}">
+			<a href="/generative/slug/{generativeSlug}/?page={page - 1}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-5 w-5 inline"
@@ -246,11 +247,11 @@
 				prev</a
 			>
 		{:else}
-			<a class="invisible" href="/generative/{generativeId}/?page={page - 1}">prev</a>
+			<a class="invisible" href="/generative/slug/{generativeSlug}/?page={page - 1}">prev</a>
 		{/if}
 
 		{#if page < totalPage}
-			<a href="/generative/{generativeId}/?page={page + 1}"
+			<a href="/generative/slug/{generativeSlug}/?page={page + 1}"
 				>more
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -271,7 +272,7 @@
 				</svg>
 			</a>
 		{:else}
-			<a class="invisible" href="/generative/{generativeId}/?page={page + 1}">more</a>
+			<a class="invisible" href="/generative/slug/{generativeSlug}/?page={page + 1}">more</a>
 		{/if}
 	</div>
 </div>
