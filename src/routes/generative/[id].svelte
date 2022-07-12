@@ -3,12 +3,12 @@
 
 	// if params not integer, return error
 	// todo: maybe can be transferred to endpoint
-	export async function load({ params }) {
+	export async function load({ params, url }) {
 		const ipfsGateway = 'https://gateway.fxhash2.xyz/ipfs/';
-		const url = 'https://api.fxhash.xyz/graphql';
+		const graphqlUrl = 'https://api.fxhash.xyz/graphql';
 		const slugUrl = 'https://fxhash.xyz/generative/slug/';
 		const query = gql`
-			query ExampleQuery($generativeTokenId: Float, $take: Int) {
+			query ExampleQuery($generativeTokenId: Float, $take: Int, $skip: Int) {
 				generativeToken(id: $generativeTokenId) {
 					id
 					name
@@ -17,46 +17,65 @@
 					}
 					displayUri
 					slug
+					objktsCount
+					balance
 					metadata
 					thumbnailUri
-					objkts(take: $take) {
+					objkts(take: $take, skip: $skip) {
 						metadata
+						iteration
 					}
 				}
 			}
 		`;
+		let page = url.searchParams.get('page');
+		page = Number(page);
+		const gentksPerPage = 50;
+		const generativeId = Number(params.id);
+		if (!page) page = 1;
 		const variables = {
-			generativeTokenId: Number(params.id),
-			take: 50
+			generativeTokenId: generativeId,
+			skip: (page - 1) * gentksPerPage,
+			take: gentksPerPage
 		};
 
-		const result = await request(url, query, variables);
+		const result = await request(graphqlUrl, query, variables);
 		const author = result.generativeToken.author.name;
 		const description = result.generativeToken.metadata.description;
 		const slug = slugUrl + result.generativeToken.slug;
 		const display = ipfsGateway + result.generativeToken.displayUri.slice(7);
 		const thumbnail = ipfsGateway + result.generativeToken.thumbnailUri.slice(7);
+		const objktsCount = result.generativeToken.objktsCount;
+		const balance = result.generativeToken.balance;
 
 		let gentkThumbnails = [];
 		let gentkDisplays = [];
+		let gentkIterations = [];
 
 		result.generativeToken.objkts.forEach((objkt) => {
 			const gentkThumbnail = objkt.metadata.thumbnailUri;
 			gentkThumbnails.push(ipfsGateway + gentkThumbnail.slice(7));
 			gentkDisplays.push(ipfsGateway + objkt.metadata.displayUri.slice(7));
+			gentkIterations.push(objkt.iteration);
 		});
 
 		return {
 			status: 200,
 			props: {
 				name: result.generativeToken.name,
+				generativeId,
 				description,
 				thumbnail,
 				display,
 				slug,
 				gentkThumbnails,
 				gentkDisplays,
-				author
+				gentkIterations,
+				gentksPerPage,
+				author,
+				objktsCount,
+				balance,
+				page
 			}
 		};
 	}
@@ -64,22 +83,53 @@
 
 <script>
 	import * as animateScroll from 'svelte-scrollto';
-	export let name, display, thumbnail, description, author, slug, gentkDisplays, gentkThumbnails;
+	export let name,
+		display,
+		thumbnail,
+		description,
+		author,
+		slug,
+		gentkDisplays,
+		gentkThumbnails,
+		gentkIterations,
+		gentksPerPage,
+		objktsCount,
+		balance,
+		page,
+		generativeId;
+
+	// page = Number(page);
+	let currentDisplay = thumbnail;
+	let defaultDisplay;
+
+	// use thumbnail as placeholder
+	// before display is fully loaded
+	function initialLoad() {
+		if (!defaultDisplay) {
+			defaultDisplay = new Image();
+			defaultDisplay.src = display;
+			defaultDisplay.onload = () => {
+				currentDisplay = display;
+			};
+		}
+	}
 
 	let iteration = 0;
 	function changeDisplay(index) {
-		display = gentkThumbnails[index];
+		currentDisplay = gentkThumbnails[index];
 		animateScroll.scrollToTop();
-		iteration = index + 1;
+		iteration = gentkIterations[index];
 
 		// when display image is fully loaded
 		// replace the thumbnail placeholder
 		const displayImg = new Image();
 		displayImg.src = gentkDisplays[index];
 		displayImg.onload = () => {
-			display = gentkDisplays[index];
+			currentDisplay = gentkDisplays[index];
 		};
 	}
+
+	const totalPage = Math.ceil(objktsCount / gentksPerPage);
 </script>
 
 <div class="flex flex-col">
@@ -118,7 +168,8 @@
 
 	<img
 		class="mx-auto my-10 object-contain md:h-[75vh] md:my-5"
-		src={display}
+		src={currentDisplay}
+		use:initialLoad
 		alt="generative artwork"
 	/>
 
@@ -163,7 +214,7 @@
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 		</svg>
 	</div>
-	<div class="flex flex-wrap max-w-7xl mx-auto">
+	<div id="thumbnails" class="flex flex-wrap max-w-7xl mx-auto mb-16">
 		{#each gentkThumbnails as thumbnail, index}
 			<div class="basis-1/2 p-0.5 sm:basis-1/3 lg:basis-1/4">
 				<img
@@ -175,6 +226,62 @@
 			</div>
 		{/each}
 	</div>
-</div>
 
-<p class="text-center mt-16 mb-3"><a href="/about">about</a></p>
+	<div class="flex justify-center space-x-10 mb-16">
+		{#if page > 1}
+			<a href="/generative/{generativeId}/?page={page - 1}">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5 inline"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+				 prev</a
+			>
+		{:else}
+			<a class="invisible" href="/generative/{generativeId}/?page={page - 1}">prev</a>
+		{/if}
+
+		{#if page < totalPage}
+			<a href="/generative/{generativeId}/?page={page + 1}"
+				>more
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-5 w-5 inline"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+				>
+					<path
+						fill-rule="evenodd"
+						d="M10.293 15.707a1 1 0 010-1.414L14.586 10l-4.293-4.293a1 1 0 111.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+						clip-rule="evenodd"
+					/>
+					<path
+						fill-rule="evenodd"
+						d="M4.293 15.707a1 1 0 010-1.414L8.586 10 4.293 5.707a1 1 0 011.414-1.414l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0z"
+						clip-rule="evenodd"
+					/>
+				</svg>
+			</a>
+		{:else}
+			<a class="invisible" href="/generative/{generativeId}/?page={page + 1}">more</a>
+		{/if}
+	</div>
+
+	<!-- numbered pagination -->
+	<!-- <div class="flex justify-center space-x-8 mb-16">
+		{#each Array(totalPage) as _, index (index)}
+			<a class="" href="/generative/{generativeId}/?page={index + 1}"
+				>{index + 1}</a
+			>
+		{/each}
+	</div> -->
+
+	<p class="text-center mb-3"><a href="/about">about</a></p>
+</div>
