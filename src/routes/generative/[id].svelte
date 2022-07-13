@@ -24,6 +24,10 @@
 					objkts(take: $take, skip: $skip) {
 						metadata
 						iteration
+						owner {
+							name
+							id
+						}
 					}
 				}
 			}
@@ -51,12 +55,14 @@
 		let gentkThumbnails = [];
 		let gentkDisplays = [];
 		let gentkIterations = [];
+		let gentkOwner = [];
 
 		result.generativeToken.objkts.forEach((objkt) => {
 			const gentkThumbnail = objkt.metadata.thumbnailUri;
 			gentkThumbnails.push(ipfsGateway + gentkThumbnail.slice(7));
 			gentkDisplays.push(ipfsGateway + objkt.metadata.displayUri.slice(7));
 			gentkIterations.push(objkt.iteration);
+			gentkOwner.push(objkt.owner);
 		});
 
 		return {
@@ -71,6 +77,7 @@
 				gentkThumbnails,
 				gentkDisplays,
 				gentkIterations,
+				gentkOwner,
 				gentksPerPage,
 				author,
 				objktsCount,
@@ -92,6 +99,7 @@
 		gentkDisplays,
 		gentkThumbnails,
 		gentkIterations,
+		gentkOwner,
 		gentksPerPage,
 		objktsCount,
 		balance,
@@ -129,21 +137,22 @@
 	}
 
 	const totalPage = Math.ceil(objktsCount / gentksPerPage);
+
+	let hideToggle = false;
+	if (description.length < 100) hideToggle = true;
+
+	const shortDescription = description.slice(0, 100);
+	let descriptionExpand = false;
+
+	function toggleDescription() {
+		descriptionExpand = !descriptionExpand;
+	}
 </script>
 
 <div class="flex flex-col">
 	<div class="flex justify-between items-center m-3 align-bottom">
 		<a href="/">
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				class="h-6 w-6"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke="currentColor"
-				stroke-width="2"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-			</svg>
+			<span class="font-mono">home</span>
 		</a>
 
 		<a href={slug}>
@@ -180,8 +189,57 @@
 		{:else}
 			<h1 class="text-4xl font-bold">{name} #{iteration}</h1>
 		{/if}
-		<p class="mb-4">by {author}</p>
-		<div class="whitespace-pre-line">{description}</div>
+
+		<div class="mb-6 break-all">
+			<p>Artist: {author}</p>
+			{#if iteration != 0}
+				{#if !gentkOwner[iteration].name}
+					<p class="">Owner: {gentkOwner[iteration].id}</p>
+				{:else}
+					<p class="">Owner: {gentkOwner[iteration].name}</p>
+				{/if}
+			{/if}
+		</div>
+
+		{#if !hideToggle}
+			{#if !descriptionExpand}
+				<div class="whitespace-pre-line">
+					{shortDescription}...
+				</div>
+				<span class="hover:cursor-pointer font-mono" on:click={toggleDescription}
+					>read more <svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-4 w-4 inline"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+					</svg></span
+				>
+			{:else}
+				<div class="whitespace-pre-line">
+					{description}
+				</div>
+				<span class="hover:cursor-pointer font-mono" on:click={toggleDescription}
+					>read less <svg
+						xmlns="http://www.w3.org/2000/svg"
+						class="h-4 w-4 inline"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+						stroke-width="2"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+					</svg></span
+				>
+			{/if}
+		{:else}
+			<div class="whitespace-pre-line">
+				{description}
+			</div>
+		{/if}
 	</div>
 	<div class="flex justify-center mb-16">
 		<svg
@@ -233,7 +291,7 @@
 			<a href="/generative/{generativeId}/?page={page - 1}">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5 inline"
+					class="h-4 w-4 inline"
 					viewBox="0 0 20 20"
 					fill="currentColor"
 				>
@@ -254,7 +312,7 @@
 				>more
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5 inline"
+					class="h-4 w-4 inline"
 					viewBox="0 0 20 20"
 					fill="currentColor"
 				>

@@ -1,11 +1,11 @@
 <div class="max-w-sm p-2">
-	<p>An alternative front-end to fxhash.</p>
+	<p>A small alternative front-end to fxhash.</p>
 
 	<br />
 
 	<p>
 		This site doesn't interact with the blockchain. It only displays Generative Tokens and minted
-		JPEGs from fxhash's API - it's a read-only site.
+		JPEGs from fxhash's API - it's a read-only site. Think of it as a small museum.
 	</p>
 
 	<br />
@@ -15,11 +15,11 @@
 		<code>displayhash.netlify.app</code> (animation currently unsupported).
 	</p>
 
-	<br />
+<br />
 
 	<p>
-		Try <a class="underline" href="/generative/5">displayhash.netlify.app/generative/5</a>. This
-		site is great for JPEGs with horizontal aspect ratio.
+		Try <a class="underline font-mono" href="/generative/5">displayhash.netlify.app/generative/5</a>. This
+		site is great for JPEGs with horizontal aspect ratio, especially on desktop.
 	</p>
 
 	<br />
@@ -29,13 +29,13 @@
 	<ul class="list-inside list-disc break-all">
 		<!-- <li>https://displayhash.netlify.app/generative/slug/a-bugged-forest</li> -->
 		<li>
-			<a class="underline" href="/generative/slug/a-bugged-forest">zancan's "A bugged Forest"</a>
+			<a class="underline font-mono" href="/generative/slug/a-bugged-forest">zancan's "A bugged Forest"</a>
 		</li>
 		<li>
-			<a class="underline" href="/generative/8676">dmarchi's "Bravura"</a>
+			<a class="underline font-mono" href="/generative/8676">dmarchi's "Bravura"</a>
 		</li>
 		<li>
-			<a class="underline" href="/generative/slug/linescapes-1">Jacob Gold's "Linescapes"</a>
+			<a class="underline font-mono" href="/generative/slug/linescapes-1">Jacob Gold's "Linescapes"</a>
 		</li>
 	</ul>
 
@@ -43,7 +43,7 @@
 
 	<p>
 		Suggestions, comments? Ping me on Twitter: <a
-			class="underline"
+			class="underline font-mono"
 			href="https://twitter.com/Liaoesque">@Liaoesque</a
 		>. Code is open-sourced at github.com/blablabla.
 	</p>
