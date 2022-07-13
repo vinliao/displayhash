@@ -11,15 +11,16 @@
 	<br />
 
 	<p>
-		To use it, navigate to any Generative Token on fxhash and replace <code>fxhash.xyz</code> with
+		To use it, navigate to any Generative Token on fxhash and replace <code>www.fxhash.xyz</code>
+		with
 		<code>displayhash.netlify.app</code> (animation currently unsupported).
 	</p>
 
-<br />
+	<br />
 
 	<p>
-		Try <a class="underline font-mono" href="/generative/5">displayhash.netlify.app/generative/5</a>. This
-		site is great for JPEGs with horizontal aspect ratio, especially on desktop.
+		Try <a class="underline font-mono" href="/generative/5">displayhash.netlify.app/generative/5</a
+		>. This site is great for JPEGs with horizontal aspect ratio, especially on desktop.
 	</p>
 
 	<br />
@@ -29,13 +30,17 @@
 	<ul class="list-inside list-disc break-all">
 		<!-- <li>https://displayhash.netlify.app/generative/slug/a-bugged-forest</li> -->
 		<li>
-			<a class="underline font-mono" href="/generative/slug/a-bugged-forest">zancan's "A bugged Forest"</a>
+			<a class="underline font-mono" href="/generative/slug/a-bugged-forest"
+				>zancan's "A bugged Forest"</a
+			>
 		</li>
 		<li>
 			<a class="underline font-mono" href="/generative/8676">dmarchi's "Bravura"</a>
 		</li>
 		<li>
-			<a class="underline font-mono" href="/generative/slug/linescapes-1">Jacob Gold's "Linescapes"</a>
+			<a class="underline font-mono" href="/generative/slug/linescapes-1"
+				>Jacob Gold's "Linescapes"</a
+			>
 		</li>
 	</ul>
 
@@ -45,6 +50,9 @@
 		Suggestions, comments? Ping me on Twitter: <a
 			class="underline font-mono"
 			href="https://twitter.com/Liaoesque">@Liaoesque</a
-		>. Code is open-sourced at github.com/blablabla.
+		>. Code is open-sourced at
+		<a class="underline font-mono" href="https://github.com/vinliao/displayhash"
+			>github.com/vinliao/displayhash</a
+		>.
 	</p>
 </div>
