@@ -34,7 +34,7 @@
 
 		let page = url.searchParams.get('page');
 		page = Number(page);
-		const gentksPerPage = 50;
+		const gentksPerPage = 48;
 		const generativeId = Number(params.id);
 		if (!page) page = 1;
 		const variables = {

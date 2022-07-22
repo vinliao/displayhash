@@ -1,58 +1,64 @@
-<div class="max-w-sm p-2">
-	<p>A small alternative front-end to fxhash.</p>
+<script>
+	import { goto } from '$app/navigation';
 
-	<br />
+	let url = undefined;
 
-	<p>
-		This site doesn't interact with the blockchain. It only displays Generative Tokens and minted
-		JPEGs from fxhash's API - it's a read-only site. Think of it as a small museum.
-	</p>
+	function search() {
+		if (url) {
+			let newString = url;
+			newString = newString.replace('https://', '');
+			newString = newString.replace('http://', '');
+			newString = newString.replace('www.fxhash.xyz', '');
+			newString = newString.replace('fxhash.xyz', '');
 
-	<br />
+			goto(newString);
+		}
+	}
 
-	<p>
-		To use it, navigate to any Generative Token on fxhash and replace <code>www.fxhash.xyz</code>
-		with
-		<code>displayhash.netlify.app</code> (animation currently unsupported).
-	</p>
+	const artworks = [
+		'/generative/5',
+		'/generative/8676',
+		'/generative/slug/a-bugged-forest',
+		'/generative/slug/linescapes-1'
+	];
+	function randomArtwork() {
+		const randomIndex = Math.floor(Math.random() * artworks.length);
+		goto(artworks[randomIndex]);
+	}
+</script>
 
-	<br />
+<div class="max-w-lg mx-auto text-center flex flex-col justify-center h-screen">
+	<h1 class="text-4xl mb-10">A small fxhash museum</h1>
 
-	<p>
-		Try <a class="underline font-mono" href="/generative/5">displayhash.netlify.app/generative/5</a
-		>. This site is great for JPEGs with horizontal aspect ratio, especially on desktop.
-	</p>
+	<form on:submit|preventDefault={search} class="flex border-2 border-neutral-800 rounded-full mb-5">
+		<input
+			bind:value={url}
+			type="text"
+			class="grow mx-6 focus:outline-none focus:ring-0"
+			placeholder="https://fxhash.xyz/generative/...."
+		/>
 
-	<br />
-
-	<p>Here are a list of Generative Tokens you can check out with this alternative front-end:</p>
-
-	<ul class="list-inside list-disc break-all">
-		<!-- <li>https://displayhash.netlify.app/generative/slug/a-bugged-forest</li> -->
-		<li>
-			<a class="underline font-mono" href="/generative/slug/a-bugged-forest"
-				>zancan's "A bugged Forest"</a
+		<button
+			class="px-5 bg-neutral-800 rounded-full focus:outline-none"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				class="h-8 w-8 text-neutral-200 my-1.5"
+				viewBox="0 0 20 20"
+				fill="currentColor"
 			>
-		</li>
-		<li>
-			<a class="underline font-mono" href="/generative/8676">dmarchi's "Bravura"</a>
-		</li>
-		<li>
-			<a class="underline font-mono" href="/generative/slug/linescapes-1"
-				>Jacob Gold's "Linescapes"</a
-			>
-		</li>
-	</ul>
+				<path
+					fill-rule="evenodd"
+					d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+					clip-rule="evenodd"
+				/>
+			</svg>
+		</button>
+	</form>
 
-	<br />
+	<div class="flex justify-center space-x-20 font-mono">
+		<a href="/about">about</a>
 
-	<p>
-		Suggestions, comments? Ping me on Twitter: <a
-			class="underline font-mono"
-			href="https://twitter.com/Liaoesque">@Liaoesque</a
-		>. Code is open-sourced at
-		<a class="underline font-mono" href="https://github.com/vinliao/displayhash"
-			>github.com/vinliao/displayhash</a
-		>.
-	</p>
+		<p class="hover:cursor-pointer" on:click={randomArtwork}>random artwork</p>
+	</div>
 </div>
