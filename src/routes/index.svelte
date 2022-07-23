@@ -19,11 +19,15 @@
 		'/generative/5',
 		'/generative/8676',
 		'/generative/slug/a-bugged-forest',
-		'/generative/slug/linescapes-1'
+		'/generative/slug/linescapes-1',
+		'/generative/slug/dragons',
+		'/generative/slug/horizon(te)s',
+		'/generative/slug/loom',
+		'/generative/slug/smolskull'
 	];
 	function randomArtwork() {
 		const randomIndex = Math.floor(Math.random() * artworks.length);
-		goto(artworks[randomIndex]);
+		return artworks[randomIndex]
 	}
 </script>
 
@@ -59,6 +63,6 @@
 	<div class="flex justify-center space-x-20 font-mono">
 		<a href="/about">about</a>
 
-		<p class="hover:cursor-pointer" on:click={randomArtwork}>random artwork</p>
+		<a href="{randomArtwork()}">random artwork</a>
 	</div>
 </div>
